@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080810" />
+    <meta
+      name="description"
+      content="ArcNest is a mobile-first group expense and USDC payment app built on Arc for splitting shared costs and settling balances."
+    />
+    <meta property="og:title" content="ArcNest - Shared payments for everyday life" />
+    <meta
+      property="og:description"
+      content="Split group expenses, track balances, and pay with USDC on Arc in a simple app that feels closer to mobile banking than crypto."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/social-preview.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <title>ArcNest - Shared payments for everyday life</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #080810;
+        --bg-2: #0d0f1f;
+        --panel: rgba(255, 255, 255, 0.055);
+        --panel-strong: rgba(255, 255, 255, 0.085);
+        --line: rgba(255, 255, 255, 0.12);
+        --line-soft: rgba(255, 255, 255, 0.075);
+        --text: #f7f4ea;
+        --muted: #b4b6d2;
+        --quiet: #8588a7;
+        --blue: #3139fb;
+        --blue-2: #16a8ff;
+        --violet: #8362ff;
+        --green: #35d399;
+        --amber: #f6c85f;
+        --shadow: rgba(0, 0, 0, 0.35);
+        --max: 1180px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background:
+          linear-gradient(180deg, rgba(49, 57, 251, 0.16) 0, rgba(8, 8, 16, 0) 360px),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 48%, var(--bg) 100%);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        letter-spacing: 0;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: geometricPrecision;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .page-shell {
+        overflow: hidden;
+      }
+
+      .container {
+        width: min(var(--max), calc(100% - 48px));
+        margin: 0 auto;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        border-bottom: 1px solid var(--line-soft);
+        background: rgba(8, 8, 16, 0.74);
+        backdrop-filter: blur(20px);
+      }
+
+      .header-inner {
+        display: flex;
+        min-height: 74px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 22px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        font-weight: 760;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #070713;
+        box-shadow: 0 16px 42px rgba(49, 57, 251, 0.22);
+      }
+
+      .brand-mark img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .logo-fallback {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        place-items: center;
+        background: linear-gradient(135deg, var(--blue), var(--violet));
+        font-size: 1.1rem;
+        font-weight: 800;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-link {
+        border-radius: 999px;
+        padding: 10px 13px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 650;
+        transition:
+          background 180ms ease,
+          color 180ms ease,
+          transform 180ms ease;
+      }
+
+      .nav-link:hover {
+        background: var(--panel);
+        color: var(--text);
+        transform: translateY(-1px);
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 12px 18px;
+        background: var(--panel);
+        color: var(--text);
+        font-size: 0.92rem;
+        font-weight: 760;
+        line-height: 1;
+        box-shadow: 0 14px 38px rgba(0, 0, 0, 0.18);
+        transition:
+          transform 180ms ease,
+          border-color 180ms ease,
+          background 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      .button svg {
+        width: 17px;
+        height: 17px;
+        flex: 0 0 auto;
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.2);
+        background: var(--panel-strong);
+      }
+
+      .button.primary {
+        border-color: rgba(49, 57, 251, 0.7);
+        background: linear-gradient(135deg, var(--blue), var(--violet));
+        box-shadow: 0 20px 52px rgba(49, 57, 251, 0.28);
+      }
+
+      .nav-toggle {
+        display: none;
+        width: 44px;
+        height: 44px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--panel);
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .hero {
+        position: relative;
+        padding: 84px 0 66px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.78fr);
+        align-items: center;
+        gap: 68px;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--blue-2);
+        font-size: 0.86rem;
+        font-weight: 760;
+      }
+
+      .hero h1 {
+        max-width: 760px;
+        margin: 0;
+        font-size: 4.75rem;
+        font-weight: 820;
+        line-height: 0.98;
+      }
+
+      .hero-copy {
+        max-width: 640px;
+        margin: 24px 0 0;
+        color: var(--muted);
+        font-size: 1.14rem;
+        line-height: 1.74;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 34px;
+      }
+
+      .trust-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        max-width: 640px;
+        margin-top: 42px;
+      }
+
+      .trust-item {
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.035);
+      }
+
+      .trust-item strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .trust-item span {
+        display: block;
+        margin-top: 6px;
+        color: var(--quiet);
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+
+      .hero-visual {
+        position: relative;
+        min-height: 660px;
+      }
+
+      .hero-phone {
+        position: relative;
+        width: min(390px, 100%);
+        margin-left: auto;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 34px;
+        background: #070713;
+        box-shadow:
+          0 36px 90px rgba(0, 0, 0, 0.54),
+          0 0 0 8px rgba(255, 255, 255, 0.025);
+      }
+
+      .hero-phone::before {
+        content: "";
+        position: absolute;
+        top: 13px;
+        left: 50%;
+        z-index: 2;
+        width: 94px;
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(-50%);
+      }
+
+      .hero-phone img {
+        width: 100%;
+        height: 660px;
+        object-fit: cover;
+        object-position: top center;
+      }
+
+      .floating-balance {
+        position: absolute;
+        right: min(18vw, 210px);
+        bottom: 68px;
+        z-index: 3;
+        min-width: 220px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        padding: 16px;
+        background: rgba(13, 15, 31, 0.82);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.42);
+      }
+
+      .floating-balance span {
+        display: block;
+        color: var(--quiet);
+        font-size: 0.82rem;
+        font-weight: 680;
+      }
+
+      .floating-balance strong {
+        display: block;
+        margin-top: 6px;
+        color: var(--green);
+        font-size: 1.6rem;
+        line-height: 1;
+      }
+
+      .section {
+        padding: 86px 0;
+      }
+
+      .section-heading {
+        max-width: 760px;
+        margin-bottom: 34px;
+      }
+
+      .section-heading.center {
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+      }
+
+      .section-heading h2 {
+        margin: 0;
+        font-size: 2.65rem;
+        font-weight: 800;
+        line-height: 1.08;
+      }
+
+      .section-heading p {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 1.03rem;
+        line-height: 1.72;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .feature-card,
+      .problem-card,
+      .step-card {
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.035));
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+      }
+
+      .feature-card {
+        min-height: 210px;
+        padding: 22px;
+      }
+
+      .icon {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        background: rgba(49, 57, 251, 0.13);
+        color: var(--blue-2);
+      }
+
+      .icon svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      .feature-card h3,
+      .problem-card h3,
+      .step-card h3 {
+        margin: 20px 0 0;
+        font-size: 1.08rem;
+        line-height: 1.28;
+      }
+
+      .feature-card p,
+      .problem-card p,
+      .step-card p {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.65;
+      }
+
+      .screens-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        align-items: start;
+      }
+
+      .phone-card {
+        transform: translateY(var(--stagger, 0));
+      }
+
+      .phone-shell {
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 28px;
+        background: #070713;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.36);
+      }
+
+      .phone-shell img {
+        width: 100%;
+        height: 520px;
+        object-fit: cover;
+        object-position: top center;
+      }
+
+      .phone-caption {
+        padding: 15px 4px 0;
+      }
+
+      .phone-caption h3 {
+        margin: 0;
+        font-size: 0.98rem;
+      }
+
+      .phone-caption p {
+        margin: 6px 0 0;
+        color: var(--quiet);
+        font-size: 0.84rem;
+      }
+
+      .problem-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(340px, 0.8fr);
+        gap: 64px;
+        align-items: center;
+      }
+
+      .problem-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .problem-card {
+        padding: 20px;
+      }
+
+      .problem-card h3 {
+        margin-top: 0;
+      }
+
+      .preview-shell {
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+        box-shadow: 0 32px 84px rgba(0, 0, 0, 0.38);
+      }
+
+      .preview-shell img {
+        width: 100%;
+        height: 520px;
+        object-fit: cover;
+        object-position: top center;
+      }
+
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .step-card {
+        min-height: 238px;
+        padding: 22px;
+      }
+
+      .step-number {
+        display: inline-flex;
+        align-items: center;
+        color: var(--blue-2);
+        font-size: 0.88rem;
+        font-weight: 820;
+      }
+
+      .final-cta {
+        padding: 86px 0 98px;
+      }
+
+      .cta-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        padding: 38px;
+        background:
+          linear-gradient(135deg, rgba(49, 57, 251, 0.22), rgba(131, 98, 255, 0.1) 45%, rgba(22, 168, 255, 0.1)),
+          rgba(255, 255, 255, 0.055);
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.34);
+      }
+
+      .cta-panel h2 {
+        margin: 0;
+        font-size: 2.3rem;
+        line-height: 1.08;
+      }
+
+      .cta-panel p {
+        max-width: 620px;
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--line-soft);
+        padding: 24px 0 34px;
+        color: var(--quiet);
+        font-size: 0.9rem;
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .image-fallback {
+        display: grid;
+        min-height: 280px;
+        place-items: center;
+        padding: 28px;
+        background:
+          linear-gradient(135deg, rgba(49, 57, 251, 0.16), rgba(22, 168, 255, 0.06)),
+          rgba(255, 255, 255, 0.045);
+        color: var(--text);
+        text-align: center;
+      }
+
+      .image-fallback strong {
+        display: block;
+        font-size: 1.2rem;
+        line-height: 1.25;
+      }
+
+      .image-fallback span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+
+      .image-fallback.hero-fallback {
+        min-height: 660px;
+      }
+
+      .image-fallback.preview-fallback {
+        min-height: 520px;
+        text-align: left;
+      }
+
+      .fallback-card {
+        width: min(100%, 320px);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 18px;
+        background: rgba(8, 8, 16, 0.64);
+      }
+
+      .fallback-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-top: 14px;
+        border-top: 1px solid var(--line-soft);
+        padding-top: 14px;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .fallback-row b {
+        color: var(--green);
+        font-weight: 760;
+      }
+
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+
+      [data-reveal].is-visible {
+        animation: reveal-in 520ms ease both;
+      }
+
+      @keyframes reveal-in {
+        from {
+          opacity: 0.01;
+          transform: translateY(18px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+
+        [data-reveal] {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @media (max-width: 1040px) {
+        .hero-grid,
+        .problem-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-visual {
+          min-height: auto;
+        }
+
+        .hero-phone {
+          margin-right: auto;
+          margin-left: 0;
+        }
+
+        .floating-balance {
+          right: auto;
+          left: 290px;
+          bottom: 44px;
+        }
+
+        .features-grid,
+        .steps-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .screens-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 760px) {
+        .container {
+          width: min(100% - 32px, var(--max));
+        }
+
+        .header-inner {
+          min-height: 68px;
+        }
+
+        .nav-toggle {
+          display: grid;
+        }
+
+        .nav-links {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 16px;
+          left: 16px;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 6px;
+          border: 1px solid var(--line);
+          border-radius: 8px;
+          padding: 10px;
+          background: rgba(8, 8, 16, 0.94);
+          box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(-8px);
+        }
+
+        .site-header[data-nav-open="true"] .nav-links {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(0);
+        }
+
+        .nav-link,
+        .nav-links .button {
+          justify-content: flex-start;
+          width: 100%;
+        }
+
+        .hero {
+          padding: 54px 0 42px;
+        }
+
+        .hero-grid {
+          gap: 38px;
+        }
+
+        .hero h1 {
+          font-size: 3.1rem;
+          line-height: 1.02;
+        }
+
+        .hero-copy {
+          font-size: 1rem;
+          line-height: 1.68;
+        }
+
+        .hero-actions,
+        .trust-row {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .hero-actions .button {
+          width: 100%;
+        }
+
+        .hero-phone {
+          width: 100%;
+          max-width: 390px;
+        }
+
+        .hero-phone img,
+        .image-fallback.hero-fallback {
+          height: 600px;
+          min-height: 600px;
+        }
+
+        .floating-balance {
+          position: relative;
+          right: auto;
+          bottom: auto;
+          left: auto;
+          width: 100%;
+          max-width: 390px;
+          margin-top: 14px;
+        }
+
+        .section {
+          padding: 62px 0;
+        }
+
+        .section-heading h2,
+        .cta-panel h2 {
+          font-size: 2.05rem;
+          line-height: 1.12;
+        }
+
+        .features-grid,
+        .screens-grid,
+        .steps-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .phone-card {
+          transform: none;
+        }
+
+        .phone-shell img {
+          height: 610px;
+        }
+
+        .problem-grid {
+          gap: 34px;
+        }
+
+        .preview-shell img,
+        .image-fallback.preview-fallback {
+          height: 500px;
+          min-height: 500px;
+        }
+
+        .cta-panel {
+          grid-template-columns: 1fr;
+          padding: 28px;
+        }
+
+        .cta-panel .button {
+          width: 100%;
+        }
+
+        .footer-inner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .hero h1 {
+          font-size: 2.65rem;
+        }
+
+        .phone-shell img {
+          height: 560px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell" id="top">
+      <header class="site-header" id="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="#top" aria-label="ArcNest home">
+            <span class="brand-mark">
+              <img src="assets/logo.png" alt="ArcNest logo" data-fallback-title="A" data-fallback-variant="logo" />
+            </span>
+            <span>ArcNest</span>
+          </a>
+
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+
+          <nav class="nav-links" id="site-nav" aria-label="Main navigation">
+            <a class="nav-link" href="#features">Features</a>
+            <a class="nav-link" href="#screens">Screens</a>
+            <a class="nav-link" href="#how-it-works">How it works</a>
+            <a class="button primary" href="https://arcnest.vercel.app/?v=11" target="_blank" rel="noopener noreferrer">
+              Try App
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="container hero-grid">
+            <div data-reveal>
+              <p class="eyebrow">Arc Testnet &middot; USDC payments &middot; Mobile-first</p>
+              <h1>Shared payments<br />for everyday life.</h1>
+              <p class="hero-copy">
+                Split group expenses, track balances, and pay with USDC on Arc in a simple app that feels closer to mobile banking than crypto.
+              </p>
+              <div class="hero-actions">
+                <a class="button primary" href="https://arcnest.vercel.app/?v=11" target="_blank" rel="noopener noreferrer">
+                  Try App
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+                <a class="button" href="#screens">
+                  View demo screens
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M8 4h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" />
+                    <path d="M10 17h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </a>
+              </div>
+
+              <div class="trust-row" aria-label="ArcNest product focus">
+                <div class="trust-item">
+                  <strong>Groups</strong>
+                  <span>Shared spaces for food, travel, sports, and home costs.</span>
+                </div>
+                <div class="trust-item">
+                  <strong>Balances</strong>
+                  <span>Owe, receive, pending, and paid states stay obvious.</span>
+                </div>
+                <div class="trust-item">
+                  <strong>USDC</strong>
+                  <span>Arc payment flow without trading-style noise.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-visual" data-reveal>
+              <figure class="hero-phone">
+                <img
+                  src="assets/hero-promo.jpg"
+                  alt="ArcNest mobile home screen"
+                  data-fallback-title="ArcNest app preview"
+                  data-fallback-subtitle="Mobile wallet and group balance preview"
+                  data-fallback-variant="hero-fallback"
+                />
+              </figure>
+              <div class="floating-balance" aria-label="Net balance across groups">
+                <span>Net across groups</span>
+                <strong>+64.60 USDC</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="features">
+          <div class="container">
+            <div class="section-heading" data-reveal>
+              <h2>Everything a group needs to split and pay.</h2>
+              <p>
+                ArcNest keeps the product focused: wallet balance, groups, QR Pay, activity, and payment status &mdash; without turning it into a crypto dashboard.
+              </p>
+            </div>
+
+            <div class="features-grid">
+              <article class="feature-card" data-reveal>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M8 19a4 4 0 0 1 8 0M8.5 7.5a3.5 3.5 0 1 0 7 0 3.5 3.5 0 0 0-7 0ZM3 18a3 3 0 0 1 4-2.8M21 18a3 3 0 0 0-4-2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <h3>Shared spaces</h3>
+                <p>Create group contexts for trips, dinners, sports, groceries, or shared living costs.</p>
+              </article>
+
+              <article class="feature-card" data-reveal>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M5 7h14M5 12h14M5 17h14M9 4v16M15 4v16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <h3>Auto split</h3>
+                <p>Record who paid, choose participants, and let ArcNest calculate the exact balance.</p>
+              </article>
+
+              <article class="feature-card" data-reveal>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm10 0h2v2h-2v-2Zm4 0h2v2h-2v-2Zm-4 4h2v3h-2v-3Zm4 2h2v1h-2v-1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <h3>QR Pay</h3>
+                <p>Open a simple QR flow to receive, scan, or settle with fewer chat reminders.</p>
+              </article>
+
+              <article class="feature-card" data-reveal>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v10M8.5 9.5h5a2 2 0 0 1 0 4h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <h3>USDC on Arc</h3>
+                <p>Keep settlement in USDC while the interface stays familiar and action-led.</p>
+              </article>
+
+              <article class="feature-card" data-reveal>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M4 13h4l2-6 4 12 2-6h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <h3>Activity feed</h3>
+                <p>Payment started, confirmed, failed, and group updates are visible in one timeline.</p>
+              </article>
+
+              <article class="feature-card" data-reveal>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3 5 6v5c0 4.4 2.9 7.5 7 9 4.1-1.5 7-4.6 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                    <path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <h3>Treasury-ready</h3>
+                <p>Shared groups can surface treasury-like balances without turning the app into back office software.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="screens">
+          <div class="container">
+            <div class="section-heading center" data-reveal>
+              <h2>Real demo screens, not placeholder visuals.</h2>
+            </div>
+
+            <div class="screens-grid">
+              <article class="phone-card" style="--stagger: 0" data-reveal>
+                <figure class="phone-shell">
+                  <img
+                    src="assets/screen-home.jpg"
+                    alt="Home wallet screen"
+                    data-fallback-title="Home wallet"
+                    data-fallback-subtitle="Screenshot coming soon"
+                  />
+                </figure>
+                <div class="phone-caption">
+                  <h3>Home wallet</h3>
+                  <p>assets/screen-home.jpg</p>
+                </div>
+              </article>
+
+              <article class="phone-card" style="--stagger: 34px" data-reveal>
+                <figure class="phone-shell">
+                  <img
+                    src="assets/screen-groups.jpg"
+                    alt="Shared spaces screen"
+                    data-fallback-title="Shared spaces"
+                    data-fallback-subtitle="Screenshot coming soon"
+                  />
+                </figure>
+                <div class="phone-caption">
+                  <h3>Shared spaces</h3>
+                  <p>assets/screen-groups.jpg</p>
+                </div>
+              </article>
+
+              <article class="phone-card" style="--stagger: 12px" data-reveal>
+                <figure class="phone-shell">
+                  <img
+                    src="assets/screen-activity.jpg"
+                    alt="Payment history screen"
+                    data-fallback-title="Payment history"
+                    data-fallback-subtitle="Screenshot coming soon"
+                  />
+                </figure>
+                <div class="phone-caption">
+                  <h3>Payment history</h3>
+                  <p>assets/screen-activity.jpg</p>
+                </div>
+              </article>
+
+              <article class="phone-card" style="--stagger: 48px" data-reveal>
+                <figure class="phone-shell">
+                  <img
+                    src="assets/screen-wallet.jpg"
+                    alt="Arc wallet screen"
+                    data-fallback-title="Arc wallet"
+                    data-fallback-subtitle="Screenshot coming soon"
+                  />
+                </figure>
+                <div class="phone-caption">
+                  <h3>Arc wallet</h3>
+                  <p>assets/screen-wallet.jpg</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="container problem-grid">
+            <div data-reveal>
+              <div class="section-heading">
+                <h2>Built for everyday payment behavior.</h2>
+                <p>
+                  ArcNest is for people who want to settle travel, food, groceries, sports, or shared living costs without spreadsheets or messy chat reminders.
+                </p>
+              </div>
+
+              <div class="problem-list">
+                <article class="problem-card">
+                  <h3>Group payments are messy.</h3>
+                  <p>People forget who paid, who joined, and how much remains.</p>
+                </article>
+                <article class="problem-card">
+                  <h3>Balances need to be obvious.</h3>
+                  <p>See what you owe, what you receive, and what is pending.</p>
+                </article>
+                <article class="problem-card">
+                  <h3>Crypto should stay invisible.</h3>
+                  <p>Use simple actions like Pay, Receive, QR, and Payment complete.</p>
+                </article>
+              </div>
+            </div>
+
+            <figure class="preview-shell" data-reveal>
+              <img
+                src="assets/social-preview.jpg"
+                alt="ArcNest shared spaces preview"
+                data-fallback-title="ArcNest social preview"
+                data-fallback-subtitle="Shared spaces, QR Pay, activity, and wallet status."
+                data-fallback-variant="preview-fallback"
+                data-fallback-kind="preview"
+              />
+            </figure>
+          </div>
+        </section>
+
+        <section class="section" id="how-it-works">
+          <div class="container">
+            <div class="section-heading center" data-reveal>
+              <h2>How it works</h2>
+            </div>
+
+            <div class="steps-grid">
+              <article class="step-card" data-reveal>
+                <span class="step-number">01</span>
+                <h3>Create or join</h3>
+                <p>Start a shared space for your team, travel group, family, or friends.</p>
+              </article>
+              <article class="step-card" data-reveal>
+                <span class="step-number">02</span>
+                <h3>Add expense</h3>
+                <p>Record what was paid and who joined the expense.</p>
+              </article>
+              <article class="step-card" data-reveal>
+                <span class="step-number">03</span>
+                <h3>Split balance</h3>
+                <p>ArcNest calculates who needs to pay and who will receive.</p>
+              </article>
+              <article class="step-card" data-reveal>
+                <span class="step-number">04</span>
+                <h3>Pay with USDC</h3>
+                <p>Open the Pay flow, confirm the payment, and track status.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="final-cta">
+          <div class="container">
+            <div class="cta-panel" data-reveal>
+              <div>
+                <h2>Ready to try ArcNest?</h2>
+                <p>Open the current app demo and test the wallet-first group payment experience.</p>
+              </div>
+              <a class="button primary" href="https://arcnest.vercel.app/?v=11" target="_blank" rel="noopener noreferrer">
+                Try App -&gt;
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <span>ArcNest</span>
+          <span>Arc Testnet payment experience.</span>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      const header = document.querySelector("#site-header");
+      const navToggle = document.querySelector(".nav-toggle");
+      const navLinks = document.querySelectorAll(".nav-link, .nav-links .button");
+
+      navToggle?.addEventListener("click", () => {
+        const nextOpen = header?.dataset.navOpen !== "true";
+        header.dataset.navOpen = String(nextOpen);
+        navToggle.setAttribute("aria-expanded", String(nextOpen));
+      });
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          header.dataset.navOpen = "false";
+          navToggle?.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      function buildFallback(img) {
+        const variant = img.dataset.fallbackVariant || "";
+        const kind = img.dataset.fallbackKind || "";
+        const title = img.dataset.fallbackTitle || img.alt || "Image";
+        const subtitle = img.dataset.fallbackSubtitle || "Image coming soon";
+        const fallback = document.createElement("div");
+        fallback.className = ["image-fallback", variant].filter(Boolean).join(" ");
+
+        const card = document.createElement("div");
+        card.className = "fallback-card";
+
+        const strong = document.createElement("strong");
+        strong.textContent = title;
+        const span = document.createElement("span");
+        span.textContent = subtitle;
+
+        card.append(strong, span);
+
+        if (kind === "preview") {
+          [
+            ["Group balance", "+64.60 USDC"],
+            ["QR Pay", "Ready"],
+            ["Status", "Payment complete"]
+          ].forEach(([label, value]) => {
+            const row = document.createElement("div");
+            row.className = "fallback-row";
+            const left = document.createElement("span");
+            left.textContent = label;
+            const right = document.createElement("b");
+            right.textContent = value;
+            row.append(left, right);
+            card.append(row);
+          });
+        }
+
+        fallback.append(card);
+        return fallback;
+      }
+
+      document.querySelectorAll("img[data-fallback-title]").forEach((img) => {
+        const handleError = () => {
+          if (img.dataset.fallbackVariant === "logo") {
+            const fallback = document.createElement("span");
+            fallback.className = "logo-fallback";
+            fallback.textContent = img.dataset.fallbackTitle || "A";
+            img.replaceWith(fallback);
+            return;
+          }
+
+          img.parentElement?.classList.add("is-missing");
+          img.replaceWith(buildFallback(img));
+        };
+
+        img.addEventListener("error", handleError, { once: true });
+        if (img.complete && img.naturalWidth === 0) {
+          handleError();
+        }
+      });
+
+      const revealItems = document.querySelectorAll("[data-reveal]");
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15 }
+        );
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+    </script>
+  </body>
+</html>
