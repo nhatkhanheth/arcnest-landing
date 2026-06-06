@@ -6,12 +6,12 @@
     <meta name="theme-color" content="#080810" />
     <meta
       name="description"
-      content="ArcNest is a mobile-first group expense and USDC payment app built on Arc for splitting shared costs and settling balances."
+      content="ArcNest is a mobile-first group expense and USDC payment app built on Arc for splitting shared costs and paying balances."
     />
     <meta property="og:title" content="ArcNest - Shared payments for everyday life" />
     <meta
       property="og:description"
-      content="Turn shared expenses into real-world USDC payments. Simple to Split - Easy to Pay."
+      content="Turn shared expenses into real-world USDC payments - split simply, pay easily."
     />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="assets/social-preview.jpg" />
@@ -23,28 +23,40 @@
         window.history.scrollRestoration = "manual";
       }
 
-      function forceTop() {
+      function clearInitialHash() {
         if (window.location.hash) {
-          return;
+          window.history.replaceState(null, "", window.location.pathname + window.location.search);
         }
+      }
 
+      function forceTop() {
         window.scrollTo(0, 0);
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
       }
 
+      clearInitialHash();
       forceTop();
+
+      window.addEventListener("DOMContentLoaded", () => {
+        forceTop();
+        window.requestAnimationFrame(forceTop);
+      });
 
       window.addEventListener("pageshow", () => {
         forceTop();
         window.setTimeout(forceTop, 60);
         window.setTimeout(forceTop, 250);
+        window.setTimeout(forceTop, 750);
+        window.setTimeout(forceTop, 1500);
       });
 
       window.addEventListener("load", () => {
         forceTop();
         window.setTimeout(forceTop, 60);
         window.setTimeout(forceTop, 250);
+        window.setTimeout(forceTop, 750);
+        window.setTimeout(forceTop, 1500);
       });
 
       window.addEventListener("beforeunload", () => {
@@ -257,8 +269,20 @@
       .hero-grid {
         display: grid;
         grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.78fr);
+        grid-template-areas:
+          "content visual"
+          "controls visual";
         align-items: center;
+        row-gap: 0;
         gap: 68px;
+      }
+
+      .hero-content {
+        grid-area: content;
+      }
+
+      .hero-controls {
+        grid-area: controls;
       }
 
       .eyebrow {
@@ -355,6 +379,7 @@
       }
 
       .hero-visual {
+        grid-area: visual;
         position: relative;
         min-height: 660px;
       }
@@ -831,7 +856,6 @@
 
         .hero {
           min-height: auto;
-          overflow: hidden;
           padding: 54px 0 56px;
         }
 
@@ -876,48 +900,50 @@
         }
 
         .hero-visual {
-          position: absolute;
-          top: 142px;
-          right: -58px;
+          position: relative;
+          top: auto;
+          right: auto;
           left: auto;
-          z-index: 0;
-          width: 190px;
-          height: 230px;
-          min-height: 0;
-          overflow: hidden;
-          opacity: 0.16;
-          pointer-events: none;
+          z-index: 1;
+          width: 100%;
+          height: auto;
+          min-height: auto;
+          margin: 24px 0 0;
+          overflow: visible;
+          opacity: 1;
+          pointer-events: auto;
         }
 
         .hero-phone {
-          width: 190px;
-          max-width: none;
-          margin: 0;
-          border-radius: 22px;
-          box-shadow: none;
+          width: 100%;
+          max-width: 390px;
+          margin: 0 auto;
+          border-radius: 34px;
+          box-shadow:
+            0 30px 72px rgba(0, 0, 0, 0.42),
+            0 0 0 8px rgba(255, 255, 255, 0.02);
         }
 
         .hero-phone::before {
-          display: none;
+          display: block;
         }
 
         .hero-phone img,
         .image-fallback.hero-fallback {
-          height: 300px;
-          min-height: 300px;
+          height: 600px;
+          min-height: 600px;
         }
 
         .floating-balance {
-          position: absolute;
-          right: 22px;
-          bottom: 14px;
+          position: relative;
+          right: auto;
+          bottom: auto;
           left: auto;
-          width: 160px;
-          max-width: 160px;
-          margin-top: 0;
-          opacity: 0.55;
-          transform: scale(0.52);
-          transform-origin: bottom right;
+          width: 100%;
+          max-width: 390px;
+          margin: 14px auto 0;
+          opacity: 1;
+          transform: none;
         }
 
         .section {
@@ -1022,20 +1048,36 @@
       <main>
         <section class="hero">
           <div class="container hero-grid">
-            <div data-reveal>
+            <div class="hero-content" data-reveal>
               <p class="eyebrow">Arc Testnet &middot; USDC payments &middot; Mobile-first</p>
               <h1>Shared <span class="headline-accent">payments</span><br />for everyday life.</h1>
               <p class="hero-copy">
                 <span class="copy-line">Turn shared expenses into real-world USDC payments.</span>
-                <span class="copy-line">Simple to Split - Easy to Pay.</span>
+                <span class="copy-line">Split simply - pay easily.</span>
               </p>
+            </div>
+
+            <div class="hero-visual" data-reveal>
+              <figure class="hero-phone">
+                <img
+                  src="assets/hero-promo.jpg"
+                  alt="ArcNest mobile home screen"
+                  data-fallback-title="ArcNest app preview"
+                  data-fallback-subtitle="Mobile wallet and group balance preview"
+                  data-fallback-variant="hero-fallback"
+                />
+              </figure>
+              <div class="floating-balance" aria-label="Net balance across groups">
+                <span>Net across groups</span>
+                <strong>+64.60 USDC</strong>
+              </div>
+            </div>
+
+            <div class="hero-controls" data-reveal>
               <div class="hero-actions">
                 <a class="button primary" href="https://arcnest.vercel.app/?v=11" target="_blank" rel="noopener noreferrer">Try App</a>
                 <a class="button" href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer">
                   Get test USDC
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 3v18M17 7.5H9.5a2.5 2.5 0 0 0 0 5H14a2.5 2.5 0 0 1 0 5H6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
                 </a>
                 <a class="button" href="#screens">
                   View demo screens
@@ -1060,22 +1102,6 @@
                   <strong>USDC</strong>
                   <span>Arc payment flow without trading-style noise.</span>
                 </div>
-              </div>
-            </div>
-
-            <div class="hero-visual" data-reveal>
-              <figure class="hero-phone">
-                <img
-                  src="assets/hero-promo.jpg"
-                  alt="ArcNest mobile home screen"
-                  data-fallback-title="ArcNest app preview"
-                  data-fallback-subtitle="Mobile wallet and group balance preview"
-                  data-fallback-variant="hero-fallback"
-                />
-              </figure>
-              <div class="floating-balance" aria-label="Net balance across groups">
-                <span>Net across groups</span>
-                <strong>+64.60 USDC</strong>
               </div>
             </div>
           </div>
